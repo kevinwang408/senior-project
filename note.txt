@@ -1,0 +1,6 @@
+add folder command : git add folder/
+git log (all history)
+git log --oneline (simplified)
+git diff ID(from log) filename (review this version)
+after delete any file, remember to git add and commit to make sure that all the file have deleted
+ 
