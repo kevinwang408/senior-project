@@ -204,6 +204,7 @@ void to_enter_point(HROBOT device_id) {
         inter_vector_detect[i][0] = rel_targetball_hole[i][0];
         inter_vector_detect[i][1] = rel_targetball_hole[i][1];
     }
+// above part1
 
     
     int idx = 0;
@@ -400,7 +401,7 @@ void to_enter_point(HROBOT device_id) {
 
     }
     std::cout <<"一次投影後目標點數量:" << project_count << endl;
-
+    //above to 200row part2
     vector<vector<double>> one_flip_point(project_count, vector<double>(7,0)); //3為彈射前干擾 4為彈射後干擾 5為角度干擾 6為彈射點在洞口上 7為檢測後此彈射點是否可行，0即為可行
     vector<vector<double>> one_flip_vector(project_count, vector<double>(7, 0));//1為母球至彈射點x向量 2為母球至彈射點y向量 3為彈射點至撞擊點向量x 4為彈射點至撞擊點向量y 5,6為撞擊點座標x,y 7為夾角
     for (int i = 0; i < project_count; i++) {
@@ -589,7 +590,7 @@ void to_enter_point(HROBOT device_id) {
             } 
         }
     }
-    
+
     if (find_final == 2) {//彈射
         for (int i = 0; i < idx * 4; i++) {
             if (one_flip_point[i][6] == 0) {
@@ -611,7 +612,7 @@ void to_enter_point(HROBOT device_id) {
             }
         }
     }
-    
+    //part3
     if (find_final == 0) {
         std::cout << "沒找到，撞上去喽" << endl;
         vector<double> no_way(2, 0);
