@@ -1,21 +1,14 @@
-// ConsoleApplication2.cpp : 此檔案包含 'main' 函式。程式會於該處開始執行及結束執行。
-//
 #include <Python.h>
 #include "iostream"
 #include "windows.h"
 #include <fstream>
 #include "HRSDK.h"
-
-
 /////////////////////////////////////////
 #include <iostream>
 #include <vector>
 #include <cstdio>
 #include <math.h>
 ////////////////////////////////////////
-
-
-
 #define ball_diameter 25.6
 #define y_pos_correct -15//50 //手臂打擊點修正
 #define x_pos_correct 5//50 //手臂打擊點修正
@@ -31,14 +24,8 @@
 #define hitter_a 0
 ///////////////////////////////////////////////////
 #define boundval2 25.8139//2R
-
-
-
 using namespace std;
-
-
 ////////////////////////////////////////////////////////////
-
 double INNER_PRODUCT(double, double, double, double);//自訂意涵是
 double mag(double, double);
 double COS_VAL(double, double, double, double);
@@ -50,10 +37,9 @@ double dis(double vec_x, double vec_y, double pass_x, double pass_y, double x0, 
 #else
 #pragma comment(lib, "../../../../lib/x86/HRSDK.lib")
 #endif
+
 void __stdcall callBack(uint16_t, uint16_t, uint16_t*, int) {
-
 }//不知道要幹嘛但要就對了
-
 void wait(HROBOT device_id) {//閒置時下一步
     while (true) {
         if (get_motion_state(device_id) == 1) {
@@ -93,11 +79,6 @@ void to_enter_point(HROBOT device_id)
         i++;
     }
 
-
-
-    //vector<double> pixal_cueballcoor= {1059,665};//test data
-
-
     vector<double> real_cueballcoor(2, 0);//mother
 
     while (mother_Wcoor.getline(buffer, 1024))//讀取母球世界座標
@@ -125,23 +106,13 @@ void to_enter_point(HROBOT device_id)
         }
     }
 
-
-    //cout << pixel_to_world_trans_X(519, 385) << ' ' << pixel_to_world_trans_Y(519,385) << endl;
-    //cout << pixel_to_world_trans_X(235, 266) << ' ' << pixel_to_world_trans_Y(235,266) << endl;
-    /*for (int i = 0; i < idx; i++)
-    {
-        cout << rel_hole_childball[i][0] << ' ' << rel_hole_childball[i][1] << endl;
-    }*/
-    //cout << pixel_to_world_trans_X(780, 745) << endl;
-    //cout << pixel_to_world_trans_X(854, 833) << endl;
     vector<vector<double> > childball_interupted(36 * n * n, vector<double>(2, 0));
-
     int counter = 0;
-    for (int i = 0; i < n; i++)//所有子球
+    for (int i = 0; i < n; i++)//所有目標子球
     {
         for (int j = 0; j < 6; j++)//所有洞口
         {
-            for (int k = 0; k < n; k++)//所有子球
+            for (int k = 0; k < n; k++)//所有其他子球
             {
                 double PL_distance = dis(real_childball_coor[i][0] - real_holecoor[j][0], real_childball_coor[i][1] - real_holecoor[j][1], real_holecoor[j][0], real_holecoor[j][1], real_childball_coor[k][0], real_childball_coor[k][1]);
                 if (abs(PL_distance) < boundval2)//計算是否干擾 直線距離值竟
@@ -159,14 +130,6 @@ void to_enter_point(HROBOT device_id)
 
         }
     }
-    std::cout << 160 << endl;
-    /*
-    for (int i = 0; i < counter; i++)
-    {
-        cout << childball_interupted[i][0] << ' ' << childball_interupted[i][1] << endl;
-    }*/
-
-    cout << "-------------------------------------------------" << endl;
 
     for (int j = 0; j < counter; j++)
     {
@@ -179,12 +142,6 @@ void to_enter_point(HROBOT device_id)
             }
         }
     }
-
-    /*for (int i = 0; i < idx; i++)
-    {
-        cout << rel_hole_childball[i][0] << ' ' << rel_hole_childball[i][1] << endl;
-    }*/
-
 
     vector<double> hole_childball_mag(6 * n, 0);
 
@@ -200,9 +157,6 @@ void to_enter_point(HROBOT device_id)
             selected_ball_counter++;//找出沒有干擾球的部分 意即可以打之子球向量的數目
         }
     }
-    std::cout << 201 << endl;
-    std::cout << 202 << endl;
-    //###############################################################################
     double min = 0, temp = 0;
     for (int i = 0; i < 6 * n; i++)//sort magnitude 由小到大
     {
@@ -242,13 +196,7 @@ void to_enter_point(HROBOT device_id)
 
         }
     }
-    cout << "-------------------------------------------------" << endl;
-
-    /*for (int i = 0; i < count; i++)
-    {
-        cout << selected_childball_hole[i][0] << ' ';
-        cout << selected_childball_hole[i][1] << endl;
-    }*/
+ 
     vector<double> target_childball_coor(2, 0);
     vector<double> target_holecoor(2, 0);
     vector<double> rel_cueball_target(2, 0);
@@ -339,8 +287,7 @@ void to_enter_point(HROBOT device_id)
   
     std::cout << "可行球數目:" << resultidx << endl;
 
-
-    if (resultidx > 0) {//對找到的球做距離排序
+    if (resultidx > 0) {//對找到的球做總(母球-子球，子球-洞口)距離排序
         for (int i = 0; i < resultidx; i++) {
             for (int j = i + 1; j < resultidx; j++) {
                 double mag1 = mag(holeresult[i][0] - childresult[i][0], holeresult[i][1] - childresult[i][1]) + mag(real_cueballcoor[0] - childresult[i][0], real_cueballcoor[1] - childresult[i][1]);
@@ -380,8 +327,6 @@ void to_enter_point(HROBOT device_id)
     
     std::cout << "洞口無干擾球數目:" << selected_ball_counter << endl;
 
-    
-    
     vector<vector<double>> collide_coor_project(selected_ball_counter * 4, vector<double>(12, 0));
     //每個撞擊點 對每個邊做投影 一為投影點x 二為投影點y 三為母球與投影x向量 四為母球與投影y向量 5為母球至彈射點x向量 6為母球至彈射點y向量 7為撞擊點x 8為撞擊點y 9.10為目標子球x.y 11.12為目標洞口x.y
    
@@ -549,9 +494,7 @@ void to_enter_point(HROBOT device_id)
                             collide_coor_project_vec_detect[i][7] = 10000;
                             std::cout << "彈射後干擾" << endl;
                         }
-                        
                     }
-
                 }
                 //本身干擾
                 double angle_itself = abs(acos(COS_VAL(collide_coor_project_vec_detect[i][4], collide_coor_project_vec_detect[i][5], target_child_x- collide_coor_project[i][6], target_child_y- collide_coor_project[i][7])) * 180 / 3.1415926);
@@ -559,9 +502,7 @@ void to_enter_point(HROBOT device_id)
                     collide_coor_project_vec_detect[i][7] = 10000;
                     std::cout << "彈射後干擾" << endl;
                 }
-
             }
-            
         }
         vector<vector<double>> available_flip(selected_ball_counter * 4, vector<double>(15, 0));
         //1.2母球x.y 3.4母球至彈射x.y 5.6彈射x.y 7.8彈射至撞擊點x.y 9.10撞擊點x.y 11.12目標子球 13.14目標洞口 15總距離
@@ -569,7 +510,6 @@ void to_enter_point(HROBOT device_id)
 
         for (int i = 0; i < selected_ball_counter * 4; i++) {
             if (collide_coor_project_vec_detect[i][7] < 5000 && collide_coor_project_vec_detect[i][8] < 5000) {
-
                 available_flip[count][0] = real_cueballcoor[0];
                 available_flip[count][1] = real_cueballcoor[1];
                 available_flip[count][2] = collide_coor_project_vec_detect[i][0];
@@ -597,10 +537,8 @@ void to_enter_point(HROBOT device_id)
                 flip_target_vec[1] = available_flip[i][3] / mag(available_flip[i][2], available_flip[i][3]);
                 mini = available_flip[i][14];
                 detect = i;
-                
             }
         }
-        
         
         ofstream flip_once_point;
         flip_once_point.open("c:/users/wang8/source/repos/c++repeat/c++repeat/flip_once_point.csv", ios::out);
@@ -615,8 +553,6 @@ void to_enter_point(HROBOT device_id)
         //打擊點
         flip_once_point << available_flip[detect][0]- (ball_diameter + cali ) * flip_target_vec[0] << "," << available_flip[detect][1]- (ball_diameter + cali) * flip_target_vec[1] << endl;
         flip_once_point.close();
-        
-        //std::cout << "洞口無干擾球:" << selected_ball_counter << endl;
 
         flip_goal_coor[0] = available_flip[detect][8];//撞擊點座標
         flip_goal_coor[1] = available_flip[detect][9];//撞擊點座標
@@ -626,7 +562,6 @@ void to_enter_point(HROBOT device_id)
         flip_target_ball_coor[1] = available_flip[detect][11];
         flip_point_coor[0]= available_flip[detect][4];//彈射點座標
         flip_point_coor[1] = available_flip[detect][5];
-
 
         final_hole_coor[0] = available_flip[detect][12];
         final_hole_coor[1] = available_flip[detect][13];
@@ -640,22 +575,6 @@ void to_enter_point(HROBOT device_id)
         std::cout << "撞擊點: " << available_flip[detect][8] << " " << available_flip[detect][9] << endl;
 
     }
-    
-    
-    
-    //cout << final_childball_coor[0] << ' ' << final_childball_coor[1] << endl;
-    //cout << final_hole_coor[0] << ' ' << final_hole_coor[1] << endl;
-    //cout << real_cueballcoor[0] << ' ' << real_cueballcoor[1] << endl;
-    //=======================================================================
-    /*recheckcsv.open("C:/Users/samuel901213/Desktop/billiard_debug/recheck.csv", ios::out);
-    recheckcsv << world_to_pixel_trans_u(final_childball_coor[0], final_childball_coor[1], 0) << ',' << world_to_pixel_trans_v(final_childball_coor[0], final_childball_coor[1], 0) << endl;
-    recheckcsv << world_to_pixel_trans_u(final_hole_coor[0], final_hole_coor[1], 0) << ',' << world_to_pixel_trans_v(final_hole_coor[0], final_hole_coor[1], 0) << endl;
-    recheckcsv << world_to_pixel_trans_u(real_cueballcoor[0], real_cueballcoor[1], 0) << ',' << world_to_pixel_trans_v(real_cueballcoor[0], real_cueballcoor[1], 0) << endl;
-    */
-
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if (resultidx == 0 && flip_detect==0) {
         final_childball_coor[0] = real_childball_coor[0][0];
@@ -665,11 +584,6 @@ void to_enter_point(HROBOT device_id)
         final_hole_coor[1] = real_childball_coor[0][1] * 2 - real_cueballcoor[1];
     }
 
-    //set_override_ratio(device_id, 80);
-    //if (get_motor_state(device_id) == 0) {
-    //    set_motor_state(device_id, 1);   // Servo on
-    //    Sleep(3000);
-    //}
     double x_cueball_coor = 0, y_cueball_coor = 0, z_cueball_coor = 0;
     double x_goal_coor = 0, y_goal_coor = 0, z_goal_coor = 0;//
     double hole[3] = { 0 }, hited_ball[3] = { 0 }, hole_rel_hitedball[3] = { 0 };
@@ -684,21 +598,6 @@ void to_enter_point(HROBOT device_id)
     y_cueball_coor = real_cueballcoor[1];
     z_cueball_coor = z;
 
-    //母球座標 目標子球座標 目標洞口座標
-
-    /*for (size_t i = 0; i < 3; i++)
-    {
-        std::cin >> hole[i];//輸入洞口座標
-    }
-    for (size_t i = 0; i < 3; i++)
-    {
-        std::cin >> hited_ball[i];//輸入子球座標
-    }
-
-    std::cin >> x_cueball_coor;
-    std::cin >> y_cueball_coor;//輸入母球座標
-    std::cin >> z_cueball_coor;
-    */
     for (size_t i = 0; i < 3; i++)
     {
         hole_rel_hitedball[i] = hole[i] - hited_ball[i];//洞口-子球之向量
@@ -721,8 +620,6 @@ void to_enter_point(HROBOT device_id)
         x_goal_coor = flip_goal_coor[0];
         y_goal_coor = flip_goal_coor[1];
     }
-
-
 
     double pos_cueball[6] = { 0 };
     //double a[6] = { 500,400,200,90,90, 0 };
@@ -749,11 +646,9 @@ void to_enter_point(HROBOT device_id)
         cue_target_dis = mag(flip_point_coor[0] - x_cueball_coor, flip_point_coor[1] - y_cueball_coor) + mag(x_goal_coor - flip_point_coor[0], y_goal_coor - flip_point_coor[1])+ mag(final_hole_coor[0] - x_goal_coor, final_hole_coor[1] - y_goal_coor);
     }
 
-
     std::cout << "距離" << cue_target_dis << endl;
     std::cout << "原始打擊點:" << x_cueball_coor - (ball_diameter + cali + theta_cali) * vector_x<<" "<< y_cueball_coor - (ball_diameter + cali + theta_cali) * vector_y << endl;
     
-
     if (cue_target_dis < 200 and cue_target_dis >=175) {//距離補正
         std::cout << "近" << endl;
         set_digital_output(device_id, 15, false);//設定輸出 似乎是打擊
@@ -960,13 +855,6 @@ void to_enter_point(HROBOT device_id)
     }
     cout << endl;
     std::cout << "結束" << endl;
-    //ptp_pos(device_id, 1, pos_cueball);
-    //Sleep(6000);
-    //double line_rel_arr[6] = {TCP_move_x*40 ,TCP_move_y *40,0,0,0,0};
-    //std::cout << TCP_move_x<<std::endl;
-    //std::cout << TCP_move_y << std::endl;
-    //lin_rel_pos(device_id, 1, 80, line_rel_arr);
-    //Sleep(3000);
     set_digital_output(device_id, 15, true);//設定輸出 似乎是打擊
     set_digital_output(device_id, 14, true);//設定輸出 似乎是打擊
     set_digital_output(device_id, 13, true);//設定輸出 似乎是打擊
@@ -1004,13 +892,7 @@ int main() {
         set_acc_dec_ratio(device_id, 45);
         //set_lin_speed(device_id, 1500);
         double speed = 0;
-        /*speed = get_lin_speed(device_id);
-        std::cout << "speed: " << speed << endl;
-        set_ptp_speed(device_id, 100);
-        int ptp_speed = 0;
-        ptp_speed = get_ptp_speed(device_id);
-        std::cout << "ptp_speed: " << ptp_speed << endl;
-        get_hrss_version(device_id, hrss_ver);*/
+
         std::cout << "HRSS version: " << hrss_ver << std::endl;
         std::cout << "connect successful." << std::endl;
         int hit_count = 0;
@@ -1022,55 +904,6 @@ int main() {
         Py_Finalize();
         fclose(fp1);
         to_enter_point(device_id);
-        //while (true) {
-
-        //    FILE *fp1 = fopen("D:/hiwin/vscode_python/circle_detect_640.py", "r");
-        //    Py_Initialize();
-        //    PyRun_AnyFile(fp1, "D:/hiwin/vscode_python/circle_detect_640.py");
-        //    Py_Finalize();
-        //    fclose(fp1);
-        //    std::cout << "fuck" << endl;
-        //    to_enter_point(device_id);
-        //set_digital_output(device_id, 15, false);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 14, false);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 13, false);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 12, false);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 11, false);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 10, false);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 9, false);//設定輸出 似乎是打擊
-        //sleep(5000);
-
-        ////    to_enter_point(device_id);
-        //set_digital_output(device_id, 15, true);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 14, true);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 13, true);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 12, true);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 11, true);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 10, true);//設定輸出 似乎是打擊
-        //set_digital_output(device_id, 9, true);//設定輸出 似乎是打擊
-        //    hit_count++;
-        //    std::cout << "count:" << hit_count << endl;
-        //    if (hit_count > 25) {
-        //        break;
-        //    }
-        //    /*if (hit_count < 2) {
-        //        before_hit(device_id);
-        //    }
-        //    else if (hit_count < 3) {
-        //        hit_after(device_id);
-        //    }
-        //    else {
-        //        to_enter_point(device_id);
-        //    }
-        //    hit_count++;
-        //    std::cout << "count:" << hit_count << endl;
-        //    if (hit_count > 25) {
-        //        break;
-        //    }*/
-
-        //    
-        //}
-        //square(device_id);
 
         std::cout << "\n Press \"Enter\" key to quit the program." << std::endl;
         std::cin.get();
