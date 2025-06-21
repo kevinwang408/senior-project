@@ -6,8 +6,8 @@
 
 #include "ShotPlanner.h"
 #include "GeometryUtils.h"
-#include <cmath>
-#include <limits>
+    #include <cmath>
+    #include <limits>
 
 bool isPathObstructed(
     double x1, double y1, double x2, double y2,
