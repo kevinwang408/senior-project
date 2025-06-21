@@ -6,8 +6,8 @@
 
 #include "ShotPlanner.h"
 #include "GeometryUtils.h"
-    #include <cmath>
-    #include <limits>
+#include <cmath>
+#include <limits>
 
 bool isPathObstructed(
     double x1, double y1, double x2, double y2,
@@ -34,6 +34,7 @@ bool isPathObstructed(
 std::vector<std::pair<std::vector<double>, std::vector<double>>> selectClearShots(
     const std::vector<std::vector<double>>& cueballs,
     const std::vector<std::vector<double>>& holes,
+    const std::vector<std::vector<double>>& childballs,
     const std::vector<std::vector<double>>& obstacles,
     double bound_radius
 ) {

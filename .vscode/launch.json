@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/wang8/Desktop/senior project/some_code",
-      "program": "c:/Users/wang8/Desktop/senior project/some_code/build/Debug/outDebug",
+      "cwd": "c:/Users/wang8/Desktop/senior project/project_code",
+      "program": "c:/Users/wang8/Desktop/senior project/project_code/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
