@@ -34,20 +34,20 @@ bool isPathObstructed(
 std::vector<std::pair<std::vector<double>, std::vector<double>>> selectClearShots(
     const std::vector<std::vector<double>>& cueballs,
     const std::vector<std::vector<double>>& holes,
-    const std::vector<std::vector<double>>& childballs,
     const std::vector<std::vector<double>>& obstacles,
     double bound_radius
 ) {
-    std::vector<std::pair<std::vector<double>, std::vector<double>>> result;
+    std::vector<std::pair<std::vector<double>, std::vector<double>>> ball_hole_result;
 
     // For every cueball, check all hole paths
     for (const auto& cue : cueballs) {
         for (const auto& hole : holes) {
             if (!isPathObstructed(cue[0], cue[1], hole[0], hole[1], obstacles, bound_radius)) {
-                result.emplace_back(cue, hole);  // Add valid shot
+                ball_hole_result.emplace_back(cue, hole);  // Add valid shot
             }
         }
     }
 
-    return result;
+    
+    return ball_hole_result;
 }

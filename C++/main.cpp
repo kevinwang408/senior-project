@@ -39,7 +39,7 @@ int main() {
     int ball_count = loadSingleInt("csv/ballcount.csv");
 
     // Generate all possible direct shots
-    auto valid_shots = selectClearShots(cueball, holes, childballs, childballs, 15);
+    auto valid_shots = selectClearShots(cueball, holes, childballs, 15);
 
     std::vector<double> target_ball;
     std::vector<double> target_hole;
